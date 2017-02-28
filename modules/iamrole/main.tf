@@ -18,31 +18,6 @@ resource "aws_iam_role" "rds_bckup-role-lambdarole" {
   assume_role_policy = "${file("modules/iamrole/lambdarole.json")}"
 }
 
-# Create the Policy Document
-
-/*data "aws_iam_policy_document" "lambdapolicy" {
-  statement {
-    sid = "1"
-
-    actions = [
-       "rds:AddTagsToResource",
-       "rds:CopyDBSnapshot",
-       "rdsCopyDBClusterSnapshot",
-       "rds:DeleteSnapshot",
-       "rds:Describe*",
-       "rds:ListTagsForResource"
-    ]
-    effect = "Allow",
-    resources = [ "*" ]
-    }
-  statement {
-      actions = [ "logs:CreateLogGroup",
-                  "logs:CreateLogStream",
-                  "logs:PutLogEvents" ]
-      resources = [ "arn:aws:logs:*:*:*" ]
-    }
-}*/
-
 # Apply the Policy Document we just created
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
