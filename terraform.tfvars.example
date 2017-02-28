@@ -5,6 +5,7 @@
 #  set AWS Region & Keys  here or set via environment variables
 
 # AWS related variables
+
 #AWS_ACCESS_KEY    = "XXXXXXXXXXXXXXX"
 #AWS_SECRET_KEY    = "YxYxYxYxYxYxYxYxYxYxYxYxYxYxYxYxY"
 AWS_REGION        = "eu-central-1"
@@ -17,5 +18,5 @@ SOURCE_DB         = "Your-DB-Instance-Identifier-Here"
 
 # general Variables for the Lambda function
 
-KEEP              = "5"         # how many copies should be kept in backup region
+KEEP              = 5        # how many copies should be kept in backup region
 cron_expression   = "30 2 * * ? *"    # run daily at 2.30am (check AWS documentation for your own configuration)
