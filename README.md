@@ -7,6 +7,7 @@ All I did was to modify both these projects to work for my usecase.
 We use the RDS backup script for Lambda in a few projects and Terraform
 gives me the opportunity to have it easily reproducable for other projects.
 That's about it.
-If you like it, install Terraform, clone the repo, copy the the .example file to terraform.tfvars and fill in you variables.
+If you like it, install Terraform, clone the repo, copy the the .example file to terraform.tfvars and fill in your variables. 
+Then you run "terraform get" to initialize the modules, "terraform plan" to see what resources will be created and if you are fine with it, finally "terraform apply" to create the resources.
 The script itself will copy only automated snaphots in cronlike intervals. Check the AWS config for the correct CloudWatch Event syntax.
 (and if you find any catastrophic error, please drop me a line)
