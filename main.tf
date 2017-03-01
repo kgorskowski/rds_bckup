@@ -25,7 +25,7 @@ data "template_file" "vars" {
 module "lambdafn" {
   source        	   = "modules/lambdafn"
   unique_name   	   = "${var.unique_name}"
-  lambda_file        = "tmp/${var.stack_prefix}-${var.unique_name}.zip"
+  lambda_file        = "lambda/${var.stack_prefix}-${var.unique_name}.zip"
   stack_prefix       = "${var.stack_prefix}"
   aws_iam_role_arn   = "${module.iamrole.aws_iam_role_arn}"
   vars_ini_render    = "${data.template_file.vars.rendered}"

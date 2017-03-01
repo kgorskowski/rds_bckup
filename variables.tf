@@ -20,7 +20,7 @@ variable "AWS_DEST_REGION" {
 }
 
 variable "KEEP" {
-  default = "5"
+  default = 5
   description = "Numbers of Snapshots that will be stored in destination region"
 }
 

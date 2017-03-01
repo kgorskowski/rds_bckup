@@ -8,7 +8,25 @@ variable "stack_prefix"       {}
 variable "lambda_file"        {}
 variable "vars_ini_render"    {}
 variable "aws_iam_role_arn"   {}
-# Build Lambda Zip
+
+
+resource "null_resource" "buildlambdazip" {
+  triggers { key = "${uuid()}" }
+  provisioner "local-exec" {
+    command = <<EOF
+    mkdir lambda && mkdir tmp
+    cp rds_bckup/rds_bckup.py tmp/rds_bckup.py
+    echo "${var.vars_ini_render}" > tmp/vars.ini
+EOF
+  }
+}
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "tmp"
+  output_path = "lambda/${var.stack_prefix}-${var.unique_name}.zip"
+  depends_on  = ["null_resource.buildlambdazip"]
+}
+/*# Build Lambda Zip
 resource "null_resource" "buildlambdazip" {
   triggers { key = "${uuid()}" }
   provisioner "local-exec" {
@@ -26,19 +44,21 @@ resource "null_resource" "buildlambdazip" {
   cd ..
 EOF
   }
-}
+}*/
 
 # Create lambda function
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 resource "aws_lambda_function" "rds_bckup_lambda" {
-  function_name   = "${var.stack_prefix}_lambda_${var.unique_name}"
-  filename        = "${var.lambda_file}"
-  role            = "${var.aws_iam_role_arn}"
-  runtime         = "python2.7"
-  handler         = "rds_bckup.lambda_handler"
-  timeout         = "60"
-  depends_on      = ["null_resource.buildlambdazip"]
+  function_name     = "${var.stack_prefix}_lambda_${var.unique_name}"
+  filename          = "${var.lambda_file}"
+  source_code_hash  = "${data.archive_file.lambda_zip.output_base64sha256}"
+  role              = "${var.aws_iam_role_arn}"
+  runtime           = "python2.7"
+  handler           = "rds_bckup.lambda_handler"
+  timeout           = "60"
+  publish           = true
+  depends_on        = ["null_resource.buildlambdazip"]
 }
 
 # Run the function with CloudWatch Event cronlike scheduler
@@ -72,13 +92,13 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call" {
 # Delete temporary resources
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-resource "null_resource" "deletetmp" {
+/*resource "null_resource" "deletetmp" {
   triggers { key = "${uuid()}" }
   depends_on = ["aws_lambda_function.rds_bckup_lambda"]
   provisioner "local-exec" {
   command = "rm -rf lambda && rm -rf tmp"
   }
-}
+}*/
 
 # Output function name
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
