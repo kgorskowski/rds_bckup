@@ -11,7 +11,7 @@ config.read('./vars.ini')
 AWS_SOURCE_REGION = config.get('main' ,'AWS_SOURCE_REGION')
 AWS_DEST_REGION = config.get('main' ,'AWS_DEST_REGION')
 SOURCE_DB = config.get('main' ,'SOURCE_DB')
-KEEP = config.get('main' ,'KEEP')
+KEEP = config.getint('main' ,'KEEP')
 
 
 print('Loading function')
